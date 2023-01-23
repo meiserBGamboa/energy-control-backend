@@ -20,3 +20,17 @@ export const setEnergyControl = async (
 
   return data
 }
+
+export const listEnergy = async (
+  idHome: number
+): Promise<EnergyControlInstance[]> => {
+  if (!idHome) throw new Error('idHome es necesario.')
+
+  const data = await EnergyControl.findAll({
+    where: {
+      id_home: idHome
+    }
+  })
+
+  return data
+}

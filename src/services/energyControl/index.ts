@@ -1,15 +1,20 @@
-import { getSmartHome, setEnergyControl } from 'database'
+import {
+  EnergyControlInstance,
+  getSmartHome,
+  listEnergy,
+  setEnergyControl
+} from 'database'
 import { errorHandling } from '../utils'
 
 type process = {
-  type: 'listHomes' | 'registerEnergy'
+  type: 'listHomes' | 'registerEnergy' | 'listEnergy'
 }
 
 type DtoEnergyControlServiceRequest =
   | string
   | DtoEnergyControlRegisterEnergyRequest
 
-type DtoEnergyControlServiceResponse = string
+type DtoEnergyControlServiceResponse = string | EnergyControlInstance[]
 
 class EnergyControlService {
   #args: DtoEnergyControlServiceRequest
@@ -24,6 +29,8 @@ class EnergyControlService {
         return this.#listhomes()
       case 'registerEnergy':
         return this.#registerEnergy()
+      case 'listEnergy':
+        return this.#listEnergy()
     }
   }
 
@@ -56,6 +63,19 @@ class EnergyControlService {
       console.log('Register Energy: ', JSON.stringify(register))
 
       return 'completed'
+    } catch (error) {
+      console.log('Errors from list homes: ', JSON.stringify(error))
+
+      return errorHandling(error, 'Error in register webhook')
+    }
+  }
+
+  async #listEnergy(): Promise<DtoEnergyControlServiceResponse> {
+    try {
+      const list = await listEnergy(1)
+      // console.log(list)
+
+      return list
     } catch (error) {
       console.log('Errors from list homes: ', JSON.stringify(error))
 

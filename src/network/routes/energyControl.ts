@@ -17,9 +17,28 @@ router
     ): Promise<void> => {
       try {
         const controlEnergy = new EnergyControlService('test')
-        const list = controlEnergy.process({ type: 'listHomes' })
+        const list = await controlEnergy.process({ type: 'listHomes' })
 
         response({ success: true, message: list }, res, 200)
+      } catch (e) {
+        next(e)
+      }
+    }
+  )
+
+router
+  .route('/list-control-energy')
+  .get(
+    async (
+      req: CustomRequest,
+      res: Response,
+      next: NextFunction
+    ): Promise<void> => {
+      try {
+        const controlEnergy = new EnergyControlService('list')
+        const list = await controlEnergy.process({ type: 'listEnergy' })
+
+        response({ success: true, data: list }, res, 200)
       } catch (e) {
         next(e)
       }
@@ -39,7 +58,7 @@ router
         const controlEnergy = new EnergyControlService(
           body as DtoEnergyControlRegisterEnergyRequest
         )
-        const list = controlEnergy.process({ type: 'registerEnergy' })
+        const list = await controlEnergy.process({ type: 'registerEnergy' })
 
         response({ success: true, message: list }, res, 200)
       } catch (e) {
