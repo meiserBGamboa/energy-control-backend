@@ -29,7 +29,8 @@ export const listEnergy = async (
   const data = await EnergyControl.findAll({
     where: {
       id_home: idHome
-    }
+    },
+    order: [['date_registration', 'ASC']]
   })
 
   return data
