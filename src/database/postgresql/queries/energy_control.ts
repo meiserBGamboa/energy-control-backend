@@ -30,7 +30,7 @@ export const listEnergy = async (
     where: {
       id_home: idHome
     },
-    order: [['date_registration', 'ASC']]
+    order: [['id', 'ASC']]
   })
 
   return data
